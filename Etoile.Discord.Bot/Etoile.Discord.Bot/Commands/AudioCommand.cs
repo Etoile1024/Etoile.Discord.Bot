@@ -72,7 +72,8 @@ namespace Etoile.Discord.Bot.Commands
             {
                 SongList.Add(track);
                 ITextChannel text = Context.Channel as ITextChannel;
-                await Task.Run(() => AudioManager.PlayerControl(guild.Id, text));
+                if (SongList.Count == 1) //Player control thread cannot duplicate run
+                    await Task.Run(() => AudioManager.PlayerControl(guild.Id, text));
 
                 embedBuilder.WithTitle("エトワール").WithDescription(string.Format("目前加左\"{0}\"入個list到，排到你隊果陣時就會唱！", track.Title)).WithColor(Color.Blue);
                 await ReplyAsync("", false, embedBuilder.Build());
