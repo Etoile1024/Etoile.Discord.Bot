@@ -258,7 +258,7 @@ namespace Etoile.Discord.Bot.Commands
                 for (int i = 0; i < (count > 15 ? 15 : count); i++)
                 {
                     var songtrack = SongList[i];
-                    context += string.Format("{0} [{1}]\r\n", track.Title, track.Duration);
+                    context += string.Format("{0} [{1}]\r\n", songtrack.Title, songtrack.Duration);
                 }
                 if (count > 15)
                     context += "仲有其他歌... ...";
