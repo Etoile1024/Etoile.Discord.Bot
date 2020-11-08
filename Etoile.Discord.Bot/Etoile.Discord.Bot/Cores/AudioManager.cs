@@ -19,11 +19,11 @@ namespace Etoile.Discord.Bot.Cores
             {
                 if (player.State == PlayerState.NotPlaying)
                 {
-                    var track = SongList.FirstOrDefault();
-                    await player.PlayAsync(track);
-                    embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家開始播緊\"{0}\" [{1}]！", track.Title, track.Duration)).WithColor(Color.Blue);
+                    var song = SongList.FirstOrDefault(f => f.Guild.Id == guildid);
+                    await player.PlayAsync(song.Track);
+                    embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家開始播緊\"{0}\" [{1}]！", song.Track.Title, song.Track.Duration)).WithColor(Color.Blue);
                     await text.SendMessageAsync("", false, embedBuilder.Build());
-                    SongList.Remove(track);
+                    SongList.Remove(song);
                 }
                 await Task.Delay(100);
             }

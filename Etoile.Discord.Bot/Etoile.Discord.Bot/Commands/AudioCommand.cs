@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lavalink4NET.Rest;
 using Etoile.Discord.Bot.Cores;
+using Etoile.Discord.Bot.Structuring;
 
 namespace Etoile.Discord.Bot.Commands
 {
@@ -70,9 +71,9 @@ namespace Etoile.Discord.Bot.Commands
             }
             else
             {
-                SongList.Add(track);
+                SongList.Add(new SongTrack() { Guild = guild, Track = track });
                 ITextChannel text = Context.Channel as ITextChannel;
-                if (SongList.Count == 1) //Player control thread cannot duplicate run
+                if (SongList.Count(c => c.Guild.Id == guild.Id) == 1) //Player control thread cannot duplicate run
                     await Task.Run(() => AudioManager.PlayerControl(guild.Id, text));
 
                 embedBuilder.WithTitle("エトワール").WithDescription(string.Format("目前加左\"{0}\"入個list到，排到你隊果陣時就會唱！", track.Title)).WithColor(Color.Blue);
@@ -196,7 +197,7 @@ namespace Etoile.Discord.Bot.Commands
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
-            SongList.Clear();
+            SongList.RemoveAll(a => a.Guild.Id == guild.Id);
 
             embedBuilder.WithTitle("エトワール").WithDescription("已經清曬list裏面d歌了。").WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
@@ -252,13 +253,13 @@ namespace Etoile.Discord.Bot.Commands
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
-            int count = SongList.Count;
+            int count = SongList.Count(c => c.Guild.Id == guild.Id);
             if (count > 0)
             {
                 for (int i = 0; i < (count > 15 ? 15 : count); i++)
                 {
-                    var songtrack = SongList[i];
-                    context += string.Format("{0} [{1}]\r\n", songtrack.Title, songtrack.Duration);
+                    var songtrack = SongList.Where(w => w.Guild.Id == guild.Id).ToArray()[i];
+                    context += string.Format("{0} [{1}]\r\n", songtrack.Track.Title, songtrack.Track.Duration);
                 }
                 if (count > 15)
                     context += "仲有其他歌... ...";

@@ -1,4 +1,5 @@
-﻿using Lavalink4NET;
+﻿using Etoile.Discord.Bot.Structuring;
+using Lavalink4NET;
 using Lavalink4NET.Player;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace Etoile.Discord.Bot.Holders
     {
         public static LavalinkNode audioService;
 
-        public static List<LavalinkTrack> SongList = new List<LavalinkTrack>();
+        public static List<SongTrack> SongList = new List<SongTrack>();
     }
 }
