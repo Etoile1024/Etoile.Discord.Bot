@@ -43,7 +43,7 @@ namespace Etoile.Discord.Bot.Commands
             await player.DisconnectAsync();
         }
         [Command("play")]
-        public async Task PlayCmd(string keyword)
+        public async Task PlayCmd([Remainder]string keyword)
         {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             IGuild guild = Context.Guild;
