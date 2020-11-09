@@ -24,7 +24,7 @@ namespace Etoile.Discord.Bot.Commands
                 .AddField("?np", "睇下唱緊咩歌")
                 .AddField("?list", "列下有咩歌會唱")
                 .AddField("?skip", "quit左首歌佢囉！")
-                .AddField("?volue", "set佢有幾嘈");
+                .AddField("?volume 數值", "set佢有幾嘈");
 
             await ReplyAsync("", false, embedBuilder.Build());
 
