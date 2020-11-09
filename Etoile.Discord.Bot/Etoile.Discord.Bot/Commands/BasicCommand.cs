@@ -27,7 +27,6 @@ namespace Etoile.Discord.Bot.Commands
                 .AddField("?volume 數值", "set佢有幾嘈");
 
             await ReplyAsync("", false, embedBuilder.Build());
-
         }
     }
 }

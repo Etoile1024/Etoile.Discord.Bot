@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Lavalink4NET.Tracking;
+using Etoile.Discord.Bot.Holders;
 
 namespace Etoile.Discord.Bot.Cores
 {
@@ -128,7 +129,7 @@ namespace Etoile.Discord.Bot.Cores
             var message = arg as SocketUserMessage;
             if (message == null || message.Author.IsBot) return;
             int argPos = 0;
-            if (message.HasStringPrefix(commandPrefix, ref argPos) || message.HasMentionPrefix(discordClient.CurrentUser, ref argPos))
+            if (message.HasStringPrefix(commandPrefix, ref argPos))
             {
                 var context = new SocketCommandContext(discordClient, message);
                 var result = await commandService.ExecuteAsync(context, argPos, services);
@@ -141,6 +142,15 @@ namespace Etoile.Discord.Bot.Cores
                     string user = message.Author.Username;
                     Log.Information("User [{0}] use command {1}.", user, message.Content);
                 }
+            }
+            if (message.MentionedUsers.Any(a => a.Id == discordClient.CurrentUser.Id))
+            {
+                var context = new SocketCommandContext(discordClient, message);
+                string user = message.Author.Username;
+                string keyword = KeywordHolder.KeywordList[new Random().Next(0, KeywordHolder.KeywordList.Length)];
+                await message.Channel.SendMessageAsync(keyword);
+                Log.Information("User [{0}] mention bot.", user);
+                
             }
         }
 
