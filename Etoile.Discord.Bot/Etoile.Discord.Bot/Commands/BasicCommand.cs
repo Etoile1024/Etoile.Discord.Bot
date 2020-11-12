@@ -58,7 +58,7 @@ namespace Etoile.Discord.Bot.Commands
                     sum += result;
                     diceArray = diceArray == string.Empty ? result.ToString() : string.Format("{0}, {1}", diceArray, result);
                 }
-                string message = string.Format("{0}嘅擲骰子過程：`[{1}]` 結果：{2}", Context.User.Mention, diceArray, sum);
+                string message = string.Format("過程：`[{0}]` 結果：{1}", diceArray, sum);
                 await ReplyAsync(message);
             }
             catch (Exception ex)
