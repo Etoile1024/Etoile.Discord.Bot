@@ -36,6 +36,7 @@ namespace Etoile.Discord.Bot.Commands
             EmbedBuilder embedBuilder = new EmbedBuilder();
             try
             {
+                request = request.ToLower();
                 int count = Convert.ToInt32(request.Split('d')[0]);
                 int max = Convert.ToInt32(request.Split('d')[1]);
                 if (count > 500)
