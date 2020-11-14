@@ -39,6 +39,18 @@ namespace Etoile.Discord.Bot.Commands
                 request = request.ToLower();
                 int count = Convert.ToInt32(request.Split('d')[0]);
                 int max = Convert.ToInt32(request.Split('d')[1]);
+                if (count < 1)
+                {
+                    embedBuilder.WithTitle("エラー").WithDescription("擲骰次數一定要係正整數。").WithColor(Color.Red);
+                    await ReplyAsync("", false, embedBuilder.Build());
+                    return;
+                }
+                if (max < 2)
+                {
+                    embedBuilder.WithTitle("エラー").WithDescription("骰子最大值一定要係2或者以上。").WithColor(Color.Red);
+                    await ReplyAsync("", false, embedBuilder.Build());
+                    return;
+                }
                 if (count > 500)
                 {
                     embedBuilder.WithTitle("エラー").WithDescription("最多只可以擲500次骰。").WithColor(Color.Red);

@@ -86,6 +86,7 @@ namespace Etoile.Discord.Bot.Cores
                 trackingService.BeginTracking();
             }
 
+            KeywordHolder.LoadKeywordList();
 
             await RegisterCommandsAsync();
             await discordClient.LoginAsync(TokenType.Bot, ConfigurationManager.AppSettings["BotToken"]);
@@ -143,7 +144,7 @@ namespace Etoile.Discord.Bot.Cores
                     Log.Information("User [{0}] use command {1}.", user, message.Content);
                 }
             }
-            if (message.MentionedUsers.Any(a => a.Id == discordClient.CurrentUser.Id))
+            if (message.MentionedUsers.Any(a => a.Id == discordClient.CurrentUser.Id) && KeywordHolder.KeywordList.Length > 0)
             {
                 var context = new SocketCommandContext(discordClient, message);
                 string user = message.Author.Username;
