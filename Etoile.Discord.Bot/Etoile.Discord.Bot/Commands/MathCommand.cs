@@ -22,5 +22,12 @@ namespace Etoile.Discord.Bot.Commands
             int ans = (int)Math.Floor(input);
             await ReplyAsync(string.Format("答案係{0}, 同學check下啱唔啱！", ans));
         }
+
+        [Command("ceiling")]
+        public async Task CeilingCmd(double input)
+        {
+            int ans = (int)Math.Ceiling(input);
+            await ReplyAsync(string.Format("答案係{0}, 同學check下啱唔啱！", ans));
+        }
     }
 }
