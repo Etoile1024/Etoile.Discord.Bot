@@ -26,7 +26,9 @@ namespace Etoile.Discord.Bot.Commands
                 .AddField("?list", "列下有咩歌會唱")
                 .AddField("?skip", "quit左首歌佢囉！")
                 .AddField("?volume 數值", "set佢有幾嘈")
-                .AddField("?dice 擲骰子次數d骰子最大值", "擲骰子");
+                .AddField("?dice 擲骰子次數d骰子最大值", "擲骰子")
+                .AddField("?mod a n", "叫佢計mod function")
+                .AddField("?floor 小數值", "叫佢計floor function");
 
             await ReplyAsync("", false, embedBuilder.Build());
         }
