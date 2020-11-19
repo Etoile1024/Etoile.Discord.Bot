@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lavalink4NET.Tracking;
 using Etoile.Discord.Bot.Holders;
+using Lavalink4NET.Logging;
 
 namespace Etoile.Discord.Bot.Cores
 {
@@ -47,13 +48,17 @@ namespace Etoile.Discord.Bot.Cores
             discordClient = new DiscordSocketClient();
             clientWrapper = new DiscordClientWrapper(discordClient);
             commandService = new CommandService();
-            services = new ServiceCollection().AddSingleton(discordClient).AddSingleton(commandService).BuildServiceProvider();
+            services = new ServiceCollection().AddSingleton(discordClient).AddSingleton(commandService) // Discord.NET
+                .AddSingleton<IAudioService, LavalinkNode>().AddSingleton<IDiscordClientWrapper, DiscordClientWrapper>().AddSingleton<Lavalink4NET.Logging.ILogger, EventLogger>() //Lavalink4NET
+                .BuildServiceProvider();
 
             //Init audio service
             string lavalinkIP = ConfigurationManager.AppSettings["lavalinkIP"];
             string lavalinkPort = ConfigurationManager.AppSettings["lavalinkPort"];
             string lavalinkPw = ConfigurationManager.AppSettings["lavalinkPassword"];
 
+            var logger = services.GetRequiredService<Lavalink4NET.Logging.ILogger>() as EventLogger;
+            logger.LogMessage += AudioLog;
 
             audioService = new LavalinkNode(new LavalinkNodeOptions
             {
@@ -61,11 +66,11 @@ namespace Etoile.Discord.Bot.Cores
                 WebSocketUri = $"ws://{lavalinkIP}:{lavalinkPort}/",
                 Password = lavalinkPw,
                 DisconnectOnStop = false
-            }, clientWrapper);
-
+            }, clientWrapper, logger);
 
             discordClient.Log += LogMessage;
             discordClient.Ready += () => audioService.InitializeAsync();
+
 
             bool enableInactiveCheck = Convert.ToBoolean(ConfigurationManager.AppSettings["enableInactiveCheck"]);
             if (enableInactiveCheck)
@@ -121,6 +126,31 @@ namespace Etoile.Discord.Bot.Cores
             }
             return Task.CompletedTask;
         }
+
+        private void AudioLog(object sender, LogMessageEventArgs args)
+        {
+            switch (args.Level)
+            {
+#if DEBUG
+                case LogLevel.Debug:
+                    Log.Debug(args.Message);
+                    break;
+                case LogLevel.Trace:
+                    Log.Verbose(args.Message);
+                    break;
+#endif
+                case LogLevel.Error:
+                    Log.Error(args.Message);
+                    break;
+                case LogLevel.Information:
+                    Log.Information(args.Message);
+                    break;
+                case LogLevel.Warning:
+                    Log.Warning(args.Message);
+                    break;
+            }
+        }
+
         private async Task RegisterCommandsAsync()
         {
             discordClient.MessageReceived += HandleCommandAsync;
