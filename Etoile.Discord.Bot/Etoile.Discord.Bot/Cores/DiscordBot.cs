@@ -87,6 +87,7 @@ namespace Etoile.Discord.Bot.Cores
             }
 
             KeywordHolder.LoadKeywordList();
+            LanguageHolder.LoadLanguageList();
 
             await RegisterCommandsAsync();
             await discordClient.LoginAsync(TokenType.Bot, ConfigurationManager.AppSettings["BotToken"]);

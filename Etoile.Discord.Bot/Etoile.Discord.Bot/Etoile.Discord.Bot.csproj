@@ -114,6 +114,7 @@
     <Compile Include="Cores\DiscordBot.cs" />
     <Compile Include="Holders\AudioHolder.cs" />
     <Compile Include="Holders\KeywordHolder.cs" />
+    <Compile Include="Holders\LanguageHolder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structuring\SongTrack.cs" />
@@ -124,9 +125,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="keywords.txt" />
+    <Content Include="language.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(ProjectDir)\keywords.txt $(TargetDir)\keywords.txt</PostBuildEvent>
+    <PostBuildEvent>copy $(ProjectDir)\keywords.txt $(TargetDir)\keywords.txt
+copy $(ProjectDir)\language.txt $(TargetDir)\language.txt</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Etoile.Discord.Bot.Holders;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -15,21 +16,21 @@ namespace Etoile.Discord.Bot.Commands
         public async Task HelpCmd()
         {
             EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.WithTitle("指令說明書")
-                .AddField("?help", "睇下有咩指令")
-                .AddField("?join", "入你間房")
-                .AddField("?leave", "唔中意咪quit左佢囉")
-                .AddField("?play 關鍵字", "唱歌比你聽")
-                .AddField("?pause", "停左唱緊嘅歌")
-                .AddField("?resume", "叫佢唱翻停左嘅歌")
-                .AddField("?np", "睇下唱緊咩歌")
-                .AddField("?list", "列下有咩歌會唱")
-                .AddField("?skip", "quit左首歌佢囉！")
-                .AddField("?volume 數值", "set佢有幾嘈")
-                .AddField("?dice 擲骰子次數d骰子最大值", "擲骰子")
-                .AddField("?mod a n", "叫佢計mod function")
-                .AddField("?floor 小數值", "叫佢計floor function")
-                .AddField("?ceiling 小數值", "叫佢計ceiling function");
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("HELP_TEXT"))
+                .AddField("?help", LanguageHolder.GetTranslation("HELP_DESC"))
+                .AddField("?join", LanguageHolder.GetTranslation("JOIN_DESC"))
+                .AddField("?leave", LanguageHolder.GetTranslation("LEAVE_DESC"))
+                .AddField("?play " + LanguageHolder.GetTranslation("KEYWORD_TEXT"), LanguageHolder.GetTranslation("PLAY_DESC"))
+                .AddField("?pause", LanguageHolder.GetTranslation("PAUSE_DESC"))
+                .AddField("?resume", LanguageHolder.GetTranslation("RESUME_DESC"))
+                .AddField("?np", LanguageHolder.GetTranslation("NOW_PLAYING_DESC"))
+                .AddField("?list", LanguageHolder.GetTranslation("LIST_DESC"))
+                .AddField("?skip", LanguageHolder.GetTranslation("SKIP_DESC"))
+                .AddField("?volume " + LanguageHolder.GetTranslation("VALUE_TEXT"), LanguageHolder.GetTranslation("VOLUME_DESC"))
+                .AddField("?dice " + LanguageHolder.GetTranslation("DICE_PARMS_TEXT"), LanguageHolder.GetTranslation("DICE_DESC"))
+                .AddField("?mod a n", LanguageHolder.GetTranslation("MOD_DESC"))
+                .AddField("?floor " + LanguageHolder.GetTranslation("DECIMAL_TEXT"), LanguageHolder.GetTranslation("FLOOR_DESC"))
+                .AddField("?ceiling " + LanguageHolder.GetTranslation("DECIMAL_TEXT"), LanguageHolder.GetTranslation("CEILING_DESC"));
 
             await ReplyAsync("", false, embedBuilder.Build());
         }
@@ -44,25 +45,25 @@ namespace Etoile.Discord.Bot.Commands
                 int max = Convert.ToInt32(request.Split('d')[1]);
                 if (count < 1)
                 {
-                    embedBuilder.WithTitle("エラー").WithDescription("擲骰次數一定要係正整數。").WithColor(Color.Red);
+                    embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_MUST_POSITIVE_INT")).WithColor(Color.Red);
                     await ReplyAsync("", false, embedBuilder.Build());
                     return;
                 }
                 if (max < 2)
                 {
-                    embedBuilder.WithTitle("エラー").WithDescription("骰子最大值一定要係2或者以上。").WithColor(Color.Red);
+                    embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_MORE_THAN_2")).WithColor(Color.Red);
                     await ReplyAsync("", false, embedBuilder.Build());
                     return;
                 }
                 if (count > 500)
                 {
-                    embedBuilder.WithTitle("エラー").WithDescription("最多只可以擲500次骰。").WithColor(Color.Red);
+                    embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_LESS_THAN_500")).WithColor(Color.Red);
                     await ReplyAsync("", false, embedBuilder.Build());
                     return;
                 }
                 if (max > 100)
                 {
-                    embedBuilder.WithTitle("エラー").WithDescription("骰子最大值最多只可以係100。").WithColor(Color.Red);
+                    embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_MAX_100")).WithColor(Color.Red);
                     await ReplyAsync("", false, embedBuilder.Build());
                     return;
                 }
@@ -74,13 +75,13 @@ namespace Etoile.Discord.Bot.Commands
                     sum += result;
                     diceArray = diceArray == string.Empty ? result.ToString() : string.Format("{0}, {1}", diceArray, result);
                 }
-                string message = string.Format("過程：`[{0}]` 結果：{1}", diceArray, sum);
+                string message = LanguageHolder.GetTranslation("DICE_MSG", diceArray, sum);
                 await ReplyAsync(message);
             }
             catch (Exception ex)
             {
                 Log.Error("Error on dice command:\r\n{0}", ex);
-                embedBuilder.WithTitle("エラー").WithDescription("擲骰子失敗！請檢查你所輸入嘅指令係咪啱！").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
             }
         }

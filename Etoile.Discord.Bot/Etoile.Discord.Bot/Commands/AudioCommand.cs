@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Lavalink4NET.Rest;
 using Etoile.Discord.Bot.Cores;
 using Etoile.Discord.Bot.Structuring;
+using Etoile.Discord.Bot.Holders;
 
 namespace Etoile.Discord.Bot.Commands
 {
@@ -23,7 +24,7 @@ namespace Etoile.Discord.Bot.Commands
             EmbedBuilder embedBuilder = new EmbedBuilder();
             if (voice == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("屌你都未book房，我點入黎同你hehe啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("JOIN_NEED")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
@@ -37,7 +38,7 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，你就趕我走，你有撚病啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("LEAVE_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
@@ -51,14 +52,14 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             var track = await audioService.GetTrackAsync(keyword, SearchMode.YouTube);
             if (track == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("すみません、搵唔到你想佢唱嘅歌wor").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NO_SONG_PLAY")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
@@ -66,7 +67,7 @@ namespace Etoile.Discord.Bot.Commands
             {
                 await player.PlayAsync(track);
 
-                embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家開始唱緊\"{0}\" [{1}]！", track.Title, track.Duration)).WithColor(Color.Blue);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("START_PLAYING", track.Title, track.Duration)).WithColor(Color.Blue);
                 await ReplyAsync("", false, embedBuilder.Build());
             }
             else
@@ -76,7 +77,7 @@ namespace Etoile.Discord.Bot.Commands
                 if (SongList.Count(c => c.Guild.Id == guild.Id) == 1) //Player control thread cannot duplicate run
                     await Task.Run(() => AudioManager.PlayerControl(guild.Id, text));
 
-                embedBuilder.WithTitle("エトワール").WithDescription(string.Format("目前加左\"{0}\"入個list到，排到你隊果陣時就會唱！", track.Title)).WithColor(Color.Blue);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("SONG_QUEUE_UP", track.Title)).WithColor(Color.Blue);
                 await ReplyAsync("", false, embedBuilder.Build());
             }
         }
@@ -88,25 +89,25 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.Paused)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("首歌咪停左囉！你做乜鳩姐").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("PAUSE_ALREADY")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.NotPlaying)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇叫個BOT唱歌，你停乜鳩姐").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PLAYING")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             await player.PauseAsync();
 
-            embedBuilder.WithTitle("エトワール").WithDescription("已經停左你想叫我唱嘅歌，你滿意啦！").WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("PAUSED")).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("resume")]
@@ -117,26 +118,26 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.NotPlaying)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇叫個BOT唱歌，你停乜鳩姐").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PLAYING")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State != PlayerState.Paused)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("首歌都冇停，你做乜鳩姐").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PAUSED")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             var track = player.CurrentTrack;
             await player.ResumeAsync();
 
-            embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家開始播翻\"{0}\"", track.Title)).WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("RESUMED", track.Title)).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("np")]
@@ -147,18 +148,18 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.NotPlaying)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("個BOT都冇唱歌，你叫佢查乜鳩姐").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PLAYING")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             var track = player.CurrentTrack;
-            embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家個BOT唱緊\"{0}\" [{1}/{2}]", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration)).WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("NOW_PLAYING_MSG", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration)).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("skip")]
@@ -169,20 +170,20 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.NotPlaying)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("個BOT都冇唱歌，點quit左佢啊 大佬").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PLAYING")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             var track = player.CurrentTrack;
             await player.StopAsync();
 
-            embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家咪同你quit左\"{0}\"佢囉！", track.Title)).WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("SKIP_MSG", track.Title)).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("clear")]
@@ -193,13 +194,13 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             SongList.RemoveAll(a => a.Guild.Id == guild.Id);
 
-            embedBuilder.WithTitle("エトワール").WithDescription("已經清曬list裏面d歌了。").WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("CLEAR_MSG")).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("volume")]
@@ -210,25 +211,25 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (player.State == PlayerState.NotPlaying)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("個BOT都冇唱歌，點較佢有幾嘈啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("NOT_PLAYING")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             if (value < 1 && value > 1000)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("個數值可能太大或者太細，自己再試下啦！").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("VOLUME_INVALID_VALUE")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             await player.SetVolumeAsync(value / 100f);
 
-            embedBuilder.WithTitle("エトワール").WithDescription(string.Format("已經將佢把口嘅音量set到{0}%", value)).WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("VOLUME_MSG", value)).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
         [Command("list")]
@@ -239,17 +240,17 @@ namespace Etoile.Discord.Bot.Commands
             var player = audioService.GetPlayer<LavalinkPlayer>(guild.Id);
             if (player == null)
             {
-                embedBuilder.WithTitle("エラー").WithDescription("你都冇同我開房，我點同你做野啊？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("AUDIO_CMD_FAIL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
             string context = string.Empty;
             var track = player.CurrentTrack;
             if (track != null)
-                context += string.Format("**依家唱緊嘅係：{0} [{1}/{2}]**\r\n", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration);
+                context += LanguageHolder.GetTranslation("LIST_NOW_PLAYING\r\n", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration);
             else
             {
-                embedBuilder.WithTitle("エラー").WithDescription("個BOT都冇歌唱緊，有閪野list咩？").WithColor(Color.Red);
+                embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("LIST_NULL")).WithColor(Color.Red);
                 await ReplyAsync("", false, embedBuilder.Build());
                 return;
             }
@@ -262,9 +263,9 @@ namespace Etoile.Discord.Bot.Commands
                     context += string.Format("{0} [{1}]\r\n", songtrack.Track.Title, songtrack.Track.Duration);
                 }
                 if (count > 15)
-                    context += "仲有其他歌... ...";
+                    context += LanguageHolder.GetTranslation("LIST_MORE");
             }
-            embedBuilder.WithTitle("エトワール").AddField("列表", context).WithColor(Color.Blue);
+            embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).AddField(LanguageHolder.GetTranslation("LIST_TITLE"), context).WithColor(Color.Blue);
             await ReplyAsync("", false, embedBuilder.Build());
         }
     }

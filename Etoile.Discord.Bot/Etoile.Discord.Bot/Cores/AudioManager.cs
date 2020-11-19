@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lavalink4NET.Player;
 using Discord;
+using Etoile.Discord.Bot.Holders;
 
 namespace Etoile.Discord.Bot.Cores
 {
@@ -21,7 +22,7 @@ namespace Etoile.Discord.Bot.Cores
                 {
                     var song = SongList.FirstOrDefault(f => f.Guild.Id == guildid);
                     await player.PlayAsync(song.Track);
-                    embedBuilder.WithTitle("エトワール").WithDescription(string.Format("依家開始播緊\"{0}\" [{1}]！", song.Track.Title, song.Track.Duration)).WithColor(Color.Blue);
+                    embedBuilder.WithTitle(LanguageHolder.GetTranslation("BOT_TITLE")).WithDescription(LanguageHolder.GetTranslation("START_PLAYING", song.Track.Title, song.Track.Duration)).WithColor(Color.Blue);
                     await text.SendMessageAsync("", false, embedBuilder.Build());
                     SongList.Remove(song);
                 }

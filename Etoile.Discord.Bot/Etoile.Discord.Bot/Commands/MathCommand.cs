@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Etoile.Discord.Bot.Holders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,21 +14,21 @@ namespace Etoile.Discord.Bot.Commands
         public async Task ModCmd(int a, int n)
         {
             int ans = a % n;
-            await ReplyAsync(string.Format("答案係{0}, 同學check下啱唔啱！", ans));
+            await ReplyAsync(LanguageHolder.GetTranslation("MATH_ANS", ans));
         }
 
         [Command("floor")]
         public async Task FloorCmd(double input)
         {
             int ans = (int)Math.Floor(input);
-            await ReplyAsync(string.Format("答案係{0}, 同學check下啱唔啱！", ans));
+            await ReplyAsync(LanguageHolder.GetTranslation("MATH_ANS", ans));
         }
 
         [Command("ceiling")]
         public async Task CeilingCmd(double input)
         {
             int ans = (int)Math.Ceiling(input);
-            await ReplyAsync(string.Format("答案係{0}, 同學check下啱唔啱！", ans));
+            await ReplyAsync(LanguageHolder.GetTranslation("MATH_ANS", ans));
         }
     }
 }
