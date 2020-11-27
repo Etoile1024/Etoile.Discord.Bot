@@ -43,6 +43,8 @@ namespace Etoile.Discord.Bot.Commands
                 request = request.ToLower();
                 int count = Convert.ToInt32(request.Split('d')[0]);
                 int max = Convert.ToInt32(request.Split('d')[1]);
+                string success_img = "https://cdn.discordapp.com/attachments/773869047150149642/781911359347884052/0aae7fc675bb6018.png";//決定的成果
+                string failure_img = "https://cdn.discordapp.com/attachments/773869047150149642/781911285196783646/b9e4cf4ff89d3a53.png";//致命的失敗
                 if (count < 1)
                 {
                     embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("DICE_MUST_POSITIVE_INT")).WithColor(Color.Red);
@@ -77,6 +79,13 @@ namespace Etoile.Discord.Bot.Commands
                 }
                 string message = LanguageHolder.GetTranslation("DICE_MSG", diceArray, sum);
                 await ReplyAsync(message);
+                if (count == 1 && max == 100) //1d100 checking
+                {
+                    if (sum >= 96 && sum <= 100)
+                        await ReplyAsync(failure_img);
+                    if (sum >= 1 && sum <= 5)
+                        await ReplyAsync(success_img);
+                }
             }
             catch (Exception ex)
             {
