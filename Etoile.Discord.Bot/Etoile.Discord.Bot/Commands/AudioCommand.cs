@@ -247,7 +247,7 @@ namespace Etoile.Discord.Bot.Commands
             string context = string.Empty;
             var track = player.CurrentTrack;
             if (track != null)
-                context += LanguageHolder.GetTranslation("LIST_NOW_PLAYING\r\n", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration);
+                context += LanguageHolder.GetTranslation("LIST_NOW_PLAYING", track.Title, player.TrackPosition.ToString("hh\\:mm\\:ss"), track.Duration) + Environment.NewLine;
             else
             {
                 embedBuilder.WithTitle(LanguageHolder.GetTranslation("ERROR")).WithDescription(LanguageHolder.GetTranslation("LIST_NULL")).WithColor(Color.Red);

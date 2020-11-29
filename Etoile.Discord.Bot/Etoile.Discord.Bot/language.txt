@@ -48,3 +48,4 @@ VOLUME_MSG=已經將佢把口嘅音量set到{0}%
 LIST_NOW_PLAYING=**依家唱緊嘅係：{0} [{1}/{2}]**
 LIST_NULL=同學，我都冇唱歌。我點list到d野比你呢
 LIST_MORE=仲有其他歌... ...
+LIST_TITLE=列表

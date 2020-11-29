@@ -43,7 +43,7 @@ namespace Etoile.Discord.Bot.Commands
                 request = request.ToLower();
                 int count = Convert.ToInt32(request.Split('d')[0]);
                 int max = Convert.ToInt32(request.Split('d')[1]);
-                string success_img = "https://cdn.discordapp.com/attachments/773869047150149642/781911359347884052/0aae7fc675bb6018.png";//決定的成果
+                string success_img = "https://cdn.discordapp.com/attachments/773869047150149642/781911359347884052/0aae7fc675bb6018.png";//決定的成功
                 string failure_img = "https://cdn.discordapp.com/attachments/773869047150149642/781911285196783646/b9e4cf4ff89d3a53.png";//致命的失敗
                 if (count < 1)
                 {
